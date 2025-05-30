@@ -10,6 +10,7 @@ import {
   Image,
   Alert,
   ActivityIndicator,
+  ScrollView
 } from "react-native";
 
 import axios from "axios";
@@ -45,7 +46,7 @@ const App = () => {
       });
 
       // Simular un delay artificial de 3 segundos (asi vemos el Loading)
-      await sleep(3000);
+      await sleep(2000);
 
       console.log("Status:", response.status);
       // En response.data se encuentra la respuesta! 
@@ -74,6 +75,7 @@ const App = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <ScrollView>
       <StatusBar/>
       <Text style={styles.title}>Buscar Película por IMDb ID</Text>
 
@@ -99,8 +101,20 @@ const App = () => {
             resizeMode="contain"
           />
           <Text style={styles.movieTitle}>{movieData.Title}</Text>
+          <Text style={styles.movieTitle}>Actores: {movieData.Actors}</Text>
+          <Text style={styles.movieTitle}>Directores: {movieData.Director}</Text>
+          <Text style={styles.movieTitle}>Género: {movieData.Genre}</Text>
+          <Text style={styles.movieTitle}> Reseñas</Text>
+          {movieData.Ratings?.map((rating, index) => (
+            <>
+              <Text key={index} style={styles.movieTitle}>{rating.Source}</Text>
+              <Text style={styles.movieTitle}>{rating.Value}</Text>
+            </>
+        ))}
+
         </View>
       )}
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -110,6 +124,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: "#fff",
+    margin:1,
   },
   title: {
     fontSize: 22,
@@ -149,9 +164,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   movieTitle: {
-    fontSize: 24,
+    fontSize: 15,
     fontWeight: "600",
-    textAlign: "center",
   },
 });
 
